@@ -41,6 +41,9 @@ public class TEAM_BLUE_SCRIPT : MonoBehaviour
     public static Character characterInfo2 = new Character();
     public static Character characterInfo3 = new Character();
     Character[] characterArray = { characterInfo1, characterInfo2, characterInfo3 };
+    Vector3 newFaceVector1 = new Vector3();
+    Vector3 newFaceVector2 = new Vector3();
+    Vector3 newFaceVector3 = new Vector3();
     void Update()
 	{
         characterInfo1.setMovementFlag(true);
@@ -90,16 +93,36 @@ public class TEAM_BLUE_SCRIPT : MonoBehaviour
             character2.setLoadout(loadout.MEDIUM);
         if (character2.getZone() == zone.BlueBase || character2.getZone() == zone.RedBase)
             character3.setLoadout(loadout.MEDIUM);
+        if (character1.attackedFromLocations.Capacity != 0 && character2.attackedFromLocations.Capacity != 0 && character3.attackedFromLocations.Capacity != 0)
+        {
+            newFaceVector1 = character1.attackedFromLocations[character1.attackedFromLocations.Capacity - 1];
+            newFaceVector2 = character2.attackedFromLocations[character2.attackedFromLocations.Capacity - 1];
+            newFaceVector3 = character3.attackedFromLocations[character3.attackedFromLocations.Capacity - 1];
+        }
 
-           /*
-            character1.MoveChar(new Vector3());
-            character2.MoveChar(new Vector3(40.0f, 1.5f, 24.0f));
-            character3.MoveChar(new Vector3(-40.0f, 1.5f, -24.0f));*/
-      
+        if (character1.visibleEnemyLocations.Capacity > 0)
+        {
+            character1.SetFacing(newFaceVector1);
+        }
+        if (character2.visibleEnemyLocations.Capacity > 0)
+        {
+            character2.SetFacing(newFaceVector2);
+        }
+        if (character3.visibleEnemyLocations.Capacity > 0)
+        {
+            character3.SetFacing(newFaceVector3);
+        }
+
+
+        /*
+         character1.MoveChar(new Vector3());
+         character2.MoveChar(new Vector3(40.0f, 1.5f, 24.0f));
+         character3.MoveChar(new Vector3(-40.0f, 1.5f, -24.0f));*/
 
 
 
-    } 
+
+    }
 }
 
 public class Character
@@ -111,7 +134,7 @@ public class Character
     public bool movementFlag;
     float x = -40.0f, y = 1.5f,z = -24.0f;
     
-        public void setDeathCount()
+    public void setDeathCount()
     {
         deathCount++;
     }
@@ -131,13 +154,13 @@ public class Character
     public void changeMovement(int counter)
     {        
         if(counter == 0)
-        characterMovement.MoveChar(new Vector3(x, y ,z ));
+        characterMovement.MoveChar(new Vector3());
 
         if(counter == 1)
         characterMovement.MoveChar(new Vector3(-x, y, -z));
 
         if (counter == 2)
-        characterMovement.MoveChar(new Vector3());
+        characterMovement.MoveChar(new Vector3(x, y, z));
     }
      public int getDeathCount()
     {
